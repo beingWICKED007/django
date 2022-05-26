@@ -4,13 +4,21 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib import messages 
 from django.db.models import Q
+from django.views.generic import View
 
+class BaseView(View):
+    views = {}
 
 # Create your views here.
 
+class HomeView(BaseView):
 
-def home(request):
-    return render(request,'index.html')
+	def get(self,request):
+		
+		self.views['category'] = HomeCategories.objects.all()
+		self.views['product'] = HomeProduct.objects.all()
+
+		return render(request,'index.html',self.views)
 
 
 
@@ -302,10 +310,6 @@ def contact(request):
 
 
 
-from django.views.generic import View
-
-class BaseView(View):
-    views = {}
 
 
 class SearchView(BaseView):

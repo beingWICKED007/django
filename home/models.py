@@ -1,6 +1,8 @@
 from ast import mod
 from random import choices
+from re import S
 from secrets import choice
+from unicodedata import category
 from django.db import models
 
 # Create your models here.
@@ -109,8 +111,33 @@ class Otp(models.Model):
         return self.user
 
 
+class HomeCategories(models.Model):
+    STATUS = ('active','active',),('blank','blank')
+    name = models.CharField(max_length=255)
+    data_filter = models.CharField(max_length=255)
+    status = models.CharField(choices=STATUS,max_length=255)
+    
+    def __str__(self) -> str:
+        return self.name
 
+# class HomeSubCategories(models.Model):
+#     STATUS = ('active','active',),('blank','blank')
+#     name = models.CharField(max_length=255)
+#     data_filter = models.CharField(max_length=255)
+#     status = models.CharField(choices=STATUS,max_length=255)
+    
+    def __str__(self) -> str:
+        return self.name
 
+class HomeProduct(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='Images/homeproduct')
+    price = models.IntegerField()
+    category = models.ForeignKey(HomeCategories,on_delete=models.CASCADE)
+    # subcategory = models.ForeignKey(HomeSubCategories,on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 
